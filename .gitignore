@@ -11,7 +11,7 @@
 # next.js
 /.next/
 /out/
-/next.config.js
+next.config.js
 
 # production
 /build
@@ -27,6 +27,7 @@ yarn-error.log*
 .pnpm-debug.log*
 yarn.lock
 package-lock.json
+next.config.js
 
 # local env files
 .env*.local
@@ -37,3 +38,4 @@ package-lock.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
