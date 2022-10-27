@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Step1 from "./step1";
 import Step2 from "./step2";
-import { useIdSearch } from "../hooks/useIdSearch";
 import axios from "axios";
 import { useGetIds } from "../hooks/useGetIds";
 import UseBackDrop from "./useBackDrop";
+import { useIdSearchToss } from "../hooks/useIdSearchToss";
 
 export interface User {
   created: string;
@@ -57,8 +57,8 @@ export default function FriendsSearch() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const newArr = useIdSearch({ search, cho, userIds });
-    setFriends(newArr);
+    const {filIds} = useIdSearchToss({search, userData})
+    setFriends(filIds);
   }, [search]);
 
   const getGamesData = async () => {

@@ -14,6 +14,9 @@ function AdminRoot() {
       ) : (
         <>
           <p>허가된 유저만 접속이 가능합니다</p>
+          <Link href={"/login"}>
+            <a>go login</a>
+          </Link>
           <Link href={"/"}>
             <a>go home</a>
           </Link>

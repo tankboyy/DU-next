@@ -5,6 +5,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import AdminUser from "./adminUser";
 import AdminLog from "./adminLog";
 import AdminGame from "./adminGame";
+import AdminTest from "./adminTest";
 
 function AdminTaps() {
   const [value, setValue] = React.useState("1");
@@ -33,7 +34,7 @@ function AdminTaps() {
           <AdminLog />
         </TabPanel>
         <TabPanel value="4">
-          hi
+          <AdminTest />
         </TabPanel>
       </TabContext>
     </div>

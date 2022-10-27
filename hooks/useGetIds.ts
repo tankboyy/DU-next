@@ -11,6 +11,7 @@ export const useGetIds = async () => {
   users.map((user: User) => {
     data.push(user.userId);
     const newD: string[] = [];
+    console.log(hangul.d(user.userId, true), " bbb")
     hangul.d(user.userId, true).forEach((item) => {
       newD.push(item[0]);
     });
