@@ -1,6 +1,6 @@
 import axios from "axios";
 import { User } from "../components/friendsSearch";
-import { chosungIncludes } from "@toss/hangul";
+import { chosungIncludes, hangulIncludes } from "@toss/hangul";
 
 type IdSearchType = {
 	userData: User[]
@@ -13,7 +13,7 @@ export const useIdSearchToss = (props: {search: string; userData: User[] | undef
 		const filIds: string[] = []
 	if (props.search !== "") {
 		users!.forEach(user => {
-			if (chosungIncludes(user.userId, props.search)) {
+			if (chosungIncludes(user.userId, props.search) || hangulIncludes(user.userId, props.search)) {
 				arr.push(user)
 				filIds.push(user.userId)
 			}
