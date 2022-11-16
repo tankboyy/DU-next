@@ -75,7 +75,7 @@ function KhyGift() {
 
 	const handleClickOpen = () => {
 		const newArr = [...selectData];
-		console.log("sele", newArr)
+		console.log(newArr, "selectData")
 		setResultData([])
 		sN?.map((item, i) => {
 			if(arr[i].length === 0) return

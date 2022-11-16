@@ -3,6 +3,7 @@ import React from 'react';
 function OutTable(props: {index: number, arr: number[][], cols: any[], data: any[], setArr: React.Dispatch<React.SetStateAction<number[][]>>}) {
 
 	const pushArr = (i: number) => {
+		if(typeof (props.data[i][4]) !== "number") return
 		const newArr = [...props.arr]
 		if (!newArr[props.index].includes(i)) {
 			newArr[props.index] = [...newArr[props.index], i]
