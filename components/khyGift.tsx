@@ -66,6 +66,9 @@ function KhyGift() {
 		result[13] = result[14] + result[15]
 		result[4] = result[5] + result[13]
 		result[3] = first.join(", ")
+		result[2] = data.length
+		result[1] = "메롱"
+		result[0] = "정리"
 		const title = ["", "", "", "일시", "계", "소계", "초등", "중등", "고등", "대학", "비학", "남", "여", "소계", "성인", "아동", "남", "여", "비율"]
 		return [title, [...result]]
 	}
