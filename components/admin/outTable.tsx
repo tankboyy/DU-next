@@ -3,7 +3,9 @@ import React from 'react';
 function OutTable(props: {index: number, arr: number[][], cols: any[], data: any[], setArr: React.Dispatch<React.SetStateAction<number[][]>>}) {
 
 	const pushArr = (i: number) => {
-		if(typeof (props.data[i][4]) !== "number") return
+		console.log(i)
+		if (typeof (props.data[i][4]) !== "number") return
+		if (props.data[i][2] === "계") return
 		const newArr = [...props.arr]
 		if (!newArr[props.index].includes(i)) {
 			newArr[props.index] = [...newArr[props.index], i]
@@ -15,8 +17,9 @@ function OutTable(props: {index: number, arr: number[][], cols: any[], data: any
 	}
 
 	return (
-		<div className="table-responsive">
-			<table style={{borderSpacing: "0"}} className="table table-striped">
+		<div className="table-responsive" style={{border: "solid 1px #444444", fontSize: "12px"}}>
+			<table style={{borderSpacing: "0", width: "100%", overflow: "auto", display: "block", height: "500px"}}
+						 className="table table-striped">
 				<thead>
 				<tr>
 					{props.cols.map((c: any) => (

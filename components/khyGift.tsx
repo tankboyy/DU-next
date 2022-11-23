@@ -3,7 +3,7 @@ import FileUpload from "./admin/fileUpload";
 import { read, utils } from "xlsx";
 import ArrView from "./admin/arrView";
 import {
-	Button, Dialog, DialogActions,
+	Button, Checkbox, Dialog, DialogActions,
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
@@ -25,8 +25,13 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
+interface nameType {
+	name: string
+	i: number
+}
+
 function KhyGift() {
-	const [sN, setSN] = useState<string[]>()
+	const [sN, setSN] = useState<string[]>([])
 	const [wb, setWb] = useState<any>()
 	const [arr, setArr] = useState<number[][]>([])
 	const [selectData, setSelectData] = useState<any[][]>([])
@@ -36,6 +41,7 @@ function KhyGift() {
 	const [cols, setCols] = useState<any>()
 	const [index, setIndex] = useState(0)
 	const [open, setOpen] = useState(false);
+	const [programsName, setProgramsName] = useState<any[]>()
 
 
 	const make_cols = (refstr: any) => {
@@ -78,13 +84,13 @@ function KhyGift() {
 		console.log(newArr, "selectData")
 		setResultData([])
 		sN?.map((item, i) => {
-			if(arr[i].length === 0) return
+			if (arr[i].length === 0) return
 			const ws = wb.Sheets[item];
 			const data = utils.sheet_to_json(ws, {header: 1});
 			const pushData = arr[i].map(item => data[item]);
 			newArr[i] = pushData
 		})
-		console.log("map",[getResult(newArr.flat()), newArr.flat()])
+		console.log("map", [getResult(newArr.flat()), newArr.flat()])
 		setResultData([getResult(newArr.flat()), newArr.flat()])
 		setOpen(true);
 	};
@@ -99,6 +105,12 @@ function KhyGift() {
 			const ws = wb.Sheets[wsName]
 			const data = utils.sheet_to_json(ws, {header: 1})
 			const cols = ws["!ref"]
+			const programsArr: any[] = []
+			data.map((item: any, i) => {
+				if (item[1] === "프로그램명") return
+				if (item[1] !== undefined) programsArr.push([item[1], i])
+			})
+			setProgramsName(programsArr)
 			setData(data)
 			setCols(make_cols(cols))
 		}
@@ -124,29 +136,84 @@ function KhyGift() {
 
 	}
 
+	const pushArr = (i: number[]) => {
+		const prevArr = [...arr]
+		// @ts-ignore
+		const newArr = [...new Set([...arr[sN.indexOf(select)], i].flat())]
+		newArr.sort((a, b) => a - b)
+		prevArr[sN.indexOf(select)] = [...newArr]
+		setArr(prevArr)
+	}
+
+	const unPushArr = (i: number[]) => {
+		const prevArr = [...arr]
+		const newArr = prevArr[sN.indexOf(select)]
+		newArr.splice(newArr.indexOf(i[0]), i.length)
+		prevArr[sN.indexOf(select)] = [...newArr]
+		setArr(prevArr)
+	}
+
+
+	const pushPrograms = (name: any[], checked: boolean) => {
+		// 마지막 체크박스 클릭했을시
+		const startIndex: number = name[1]
+		const arr: number[] = []
+		if (checked) {
+			if (programsName?.indexOf(name)! + 1 === programsName?.length) {
+				for (let i = startIndex; i <= programsName?.length; i++) {
+					arr.push(i)
+				}
+			} else {
+				for (let i = startIndex; i < programsName![programsName?.indexOf(name)! + 1][1]; i++) {
+					arr.push(i)
+				}
+				pushArr(arr)
+			}
+		} else {
+			if (programsName?.indexOf(name)! + 1 === programsName?.length) {
+				for (let i = startIndex; i <= programsName?.length; i++) {
+					arr.push(i)
+				}
+			} else {
+				for (let i = startIndex; i < programsName![programsName?.indexOf(name)! + 1][1]; i++) {
+					arr.push(i)
+				}
+				unPushArr(arr)
+			}
+		}
+	}
+
 	return (
 		<div>
 			<div style={{display: 'flex', flexDirection: "row"}}>
 				<FileUpload handleFile={handleFile}/>
-				<ArrView arr={arr}/>
+				<ArrView arr={arr} sN={sN}/>
+				<FormControl sx={{m: 1, minWidth: 120}} size="small">
+					<InputLabel id="demo-select-small">골라라ㅋ</InputLabel>
+					<Select
+						labelId="demo-select-small"
+						id="demo-select-small"
+						value={select}
+						label="sheet"
+						onChange={(e: any) => setSelect(e.target.value)}
+					>
+						{sN?.map((item, i) => {
+							return <MenuItem key={i} value={item}>{item}</MenuItem>
+						})}
+					</Select>
+				</FormControl>
 				<Button variant="outlined" onClick={handleClickOpen}>
 					버튼
 				</Button>
 			</div>
-			<FormControl sx={{m: 1, minWidth: 120}} size="small">
-				<InputLabel id="demo-select-small">골라라ㅋ</InputLabel>
-				<Select
-					labelId="demo-select-small"
-					id="demo-select-small"
-					value={select}
-					label="sheet"
-					onChange={(e: any) => setSelect(e.target.value)}
-				>
-					{sN?.map((item, i) => {
-						return <MenuItem key={i} value={item}>{item}</MenuItem>
-					})}
-				</Select>
-			</FormControl>
+			<div style={{display: "flex", flexDirection: "row", fontSize: "11px"}}>
+				{programsName?.map((name, i) => (
+					<div key={i} style={{display: "flex", flexDirection: "row"}}>
+						<Checkbox onChange={(e) => pushPrograms(name, e.target.checked)}/>
+						<div>{name[0]}</div>
+					</div>
+				))}
+			</div>
 			<Dialog
 				fullWidth={true}
 				maxWidth={"xl"}
