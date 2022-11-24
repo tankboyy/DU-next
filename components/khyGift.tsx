@@ -153,6 +153,10 @@ function KhyGift() {
 		setArr(prevArr)
 	}
 
+	const checkNames = (name: string | undefined) => {
+		if(name === undefined || name === "계") return false
+		return true
+	}
 
 	const pushPrograms = (name: any[], checked: boolean) => {
 		// 마지막 체크박스 클릭했을시
@@ -160,26 +164,26 @@ function KhyGift() {
 		const arr: number[] = []
 		if (checked) {
 			if (programsName?.indexOf(name)! + 1 === programsName?.length) {
-				for (let i = startIndex; i <= programsName?.length; i++) {
-					arr.push(i)
+				for (let i = startIndex; i <= data.length - 1; i++) {
+					checkNames(data[i][2]) ? arr.push(i) : null
 				}
 			} else {
 				for (let i = startIndex; i < programsName![programsName?.indexOf(name)! + 1][1]; i++) {
-					arr.push(i)
+					checkNames(data[i][2]) ? arr.push(i) : null
 				}
-				pushArr(arr)
 			}
+			pushArr(arr)
 		} else {
 			if (programsName?.indexOf(name)! + 1 === programsName?.length) {
-				for (let i = startIndex; i <= programsName?.length; i++) {
-					arr.push(i)
+				for (let i = startIndex; i <= data.length - 1; i++) {
+					checkNames(data[i][2]) ? arr.push(i) : null
 				}
 			} else {
 				for (let i = startIndex; i < programsName![programsName?.indexOf(name)! + 1][1]; i++) {
-					arr.push(i)
+					checkNames(data[i][2]) ? arr.push(i) : null
 				}
-				unPushArr(arr)
 			}
+			unPushArr(arr)
 		}
 	}
 
