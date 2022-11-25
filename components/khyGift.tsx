@@ -154,7 +154,7 @@ function KhyGift() {
 	}
 
 	const checkNames = (name: string | undefined) => {
-		if(name === undefined || name === "계") return false
+		if (name === undefined || name === "계") return false
 		return true
 	}
 
@@ -191,7 +191,6 @@ function KhyGift() {
 		<div>
 			<div style={{display: 'flex', flexDirection: "row"}}>
 				<FileUpload handleFile={handleFile}/>
-				<ArrView arr={arr} sN={sN}/>
 				<FormControl sx={{m: 1, minWidth: 120}} size="small">
 					<InputLabel id="demo-select-small">골라라ㅋ</InputLabel>
 					<Select
@@ -209,6 +208,7 @@ function KhyGift() {
 				<Button variant="outlined" onClick={handleClickOpen}>
 					버튼
 				</Button>
+				<ArrView arr={arr} sN={sN}/>
 			</div>
 			<div style={{display: "flex", flexDirection: "row", fontSize: "11px"}}>
 				{programsName?.map((name, i) => (
