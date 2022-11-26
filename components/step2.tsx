@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import GameView from "./gameView";
 import { gameNames, Tgames } from "./friendsSearch";
+import TimerComponent from './timerComponent';
 
 interface Step2 {
 	onClickStepDown(): void;

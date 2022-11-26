@@ -3,7 +3,6 @@ import axios from "axios";
 import { User } from "../components/friendsSearch";
 
 export const useGetIds = async () => {
-  // const {users}: {users: User[]} = await graphqlReq.request(USERS)
   let users: User[] = [];
   await axios.get(`api/users`).then(({ data }) => (users = data));
   const data: string[] = [];
@@ -11,7 +10,6 @@ export const useGetIds = async () => {
   users.map((user: User) => {
     data.push(user.userId);
     const newD: string[] = [];
-    console.log(hangul.d(user.userId, true), " bbb")
     hangul.d(user.userId, true).forEach((item) => {
       newD.push(item[0]);
     });

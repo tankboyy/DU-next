@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { DetailedHTMLProps, HTMLAttributes, useEffect, useRef, useState } from 'react';
 import FileUpload from "./admin/fileUpload";
 import { read, utils } from "xlsx";
 import ArrView from "./admin/arrView";
@@ -42,6 +42,7 @@ function KhyGift() {
 	const [index, setIndex] = useState(0)
 	const [open, setOpen] = useState(false);
 	const [programsName, setProgramsName] = useState<any[]>()
+	const [checkbox, setCheckbox] = useState<boolean[][]>([])
 
 
 	const make_cols = (refstr: any) => {
@@ -81,7 +82,6 @@ function KhyGift() {
 
 	const handleClickOpen = () => {
 		const newArr = [...selectData];
-		console.log(newArr, "selectData")
 		setResultData([])
 		sN?.map((item, i) => {
 			if (arr[i].length === 0) return
@@ -100,12 +100,13 @@ function KhyGift() {
 
 	useEffect(() => {
 		const choiceWs = (wsName: string) => {
-
 			if (wsName === "") return
 			const ws = wb.Sheets[wsName]
 			const data = utils.sheet_to_json(ws, {header: 1})
 			const cols = ws["!ref"]
 			const programsArr: any[] = []
+			data.shift()
+			data.shift()
 			data.map((item: any, i) => {
 				if (item[1] === "프로그램명") return
 				if (item[1] !== undefined) programsArr.push([item[1], i])
@@ -113,6 +114,12 @@ function KhyGift() {
 			setProgramsName(programsArr)
 			setData(data)
 			setCols(make_cols(cols))
+			if(checkbox[sN.indexOf(select)].length === 0) {
+				const newArr = programsName!.map(() => false)
+				const newCheckBox = [...checkbox]
+				newCheckBox[sN.indexOf(select)] = newArr
+				setCheckbox(newCheckBox)
+			}
 		}
 		choiceWs(select)
 		if (sN) setIndex(sN.indexOf(select))
@@ -130,11 +137,14 @@ function KhyGift() {
 			setSN(wb.SheetNames)
 			setArr(Array.from({length: wb.SheetNames.length}, () => Array().fill([])))
 			setSelectData(Array.from({length: wb.SheetNames.length}, () => Array().fill([])))
+			const newCheckArr = sN.map(() => [])
+			setCheckbox(newCheckArr)
 		};
 		if (rABS) reader.readAsBinaryString(file);
 		else reader.readAsArrayBuffer(file);
 
 	}
+	const checkRef = useRef(null)
 
 	const pushArr = (i: number[]) => {
 		const prevArr = [...arr]
@@ -159,6 +169,7 @@ function KhyGift() {
 	}
 
 	const pushPrograms = (name: any[], checked: boolean) => {
+		console.log(checkRef.current)
 		// 마지막 체크박스 클릭했을시
 		const startIndex: number = name[1]
 		const arr: number[] = []
@@ -213,7 +224,7 @@ function KhyGift() {
 			<div style={{display: "flex", flexDirection: "row", fontSize: "11px"}}>
 				{programsName?.map((name, i) => (
 					<div key={i} style={{display: "flex", flexDirection: "row"}}>
-						<Checkbox onChange={(e) => pushPrograms(name, e.target.checked)}/>
+						<Checkbox ref={checkRef} onChange={(e) => pushPrograms(name, e.target.checked)}/>
 						<div>{name[0]}</div>
 					</div>
 				))}
