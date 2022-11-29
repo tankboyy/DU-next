@@ -52,11 +52,12 @@ function KhyGift() {
 		return o;
 	};
 
+
 	const getResult = (data: any[][]) => {
 		const result: any[] = Array.from({length: 19}).fill(0)
-		const first: string[] = []
+		let first: number[] = []
 		data.map((item, i) => {
-			first.push(item[3])
+			first.push(parseFloat(item[3]))
 			result[6] += item[6]
 			result[7] += item[7]
 			result[8] += item[8]
@@ -72,10 +73,15 @@ function KhyGift() {
 		result[5] = result.slice(6, 11).reduce((a, b) => a + b)
 		result[13] = result[14] + result[15]
 		result[4] = result[5] + result[13]
-		result[3] = first.join(", ")
 		result[2] = data.length
 		result[1] = "메롱"
 		result[0] = "정리"
+		const newFirst: number[] = []
+		first.forEach((item) => {
+			if (!newFirst.includes(item)) newFirst.push(item)
+		})
+		newFirst.sort((a, b) => a - b)
+		result[3] = newFirst.join(", ")
 		const title = ["", "", "", "일시", "계", "소계", "초등", "중등", "고등", "대학", "비학", "남", "여", "소계", "성인", "아동", "남", "여", "비율"]
 		return [title, [...result]]
 	}
@@ -114,8 +120,8 @@ function KhyGift() {
 			setProgramsName(programsArr)
 			setData(data)
 			setCols(make_cols(cols))
-			if(checkbox[sN.indexOf(select)].length === 0) {
-				const newArr = programsName!.map(() => false)
+			if (checkbox[sN.indexOf(select)].length === 0) {
+				const newArr = programsArr.map(() => false)
 				const newCheckBox = [...checkbox]
 				newCheckBox[sN.indexOf(select)] = newArr
 				setCheckbox(newCheckBox)
@@ -137,7 +143,7 @@ function KhyGift() {
 			setSN(wb.SheetNames)
 			setArr(Array.from({length: wb.SheetNames.length}, () => Array().fill([])))
 			setSelectData(Array.from({length: wb.SheetNames.length}, () => Array().fill([])))
-			const newCheckArr = sN.map(() => [])
+			const newCheckArr = wb.SheetNames.map(() => [])
 			setCheckbox(newCheckArr)
 		};
 		if (rABS) reader.readAsBinaryString(file);
@@ -155,10 +161,21 @@ function KhyGift() {
 		setArr(prevArr)
 	}
 
+	const checkOut = () => {
+		const prevArr = [...arr];
+		prevArr[sN.indexOf(select)] = [];
+		setArr(prevArr)
+		const prevCheck = [...checkbox];
+		const newCheck = prevCheck[sN.indexOf(select)].map(() => false)
+		prevCheck[sN.indexOf(select)] = newCheck
+		setCheckbox(prevCheck)
+	}
+
 	const unPushArr = (i: number[]) => {
 		const prevArr = [...arr]
 		const newArr = prevArr[sN.indexOf(select)]
 		newArr.splice(newArr.indexOf(i[0]), i.length)
+		newArr.sort((a, b) => a - b)
 		prevArr[sN.indexOf(select)] = [...newArr]
 		setArr(prevArr)
 	}
@@ -168,8 +185,7 @@ function KhyGift() {
 		return true
 	}
 
-	const pushPrograms = (name: any[], checked: boolean) => {
-		console.log(checkRef.current)
+	const pushPrograms = (name: any[], checked: boolean, i: number) => {
 		// 마지막 체크박스 클릭했을시
 		const startIndex: number = name[1]
 		const arr: number[] = []
@@ -178,10 +194,12 @@ function KhyGift() {
 				for (let i = startIndex; i <= data.length - 1; i++) {
 					checkNames(data[i][2]) ? arr.push(i) : null
 				}
+				checkbox[sN.indexOf(select)][i] = !checkbox[sN.indexOf(select)][i]
 			} else {
 				for (let i = startIndex; i < programsName![programsName?.indexOf(name)! + 1][1]; i++) {
 					checkNames(data[i][2]) ? arr.push(i) : null
 				}
+				checkbox[sN.indexOf(select)][i] = !checkbox[sN.indexOf(select)][i]
 			}
 			pushArr(arr)
 		} else {
@@ -189,10 +207,12 @@ function KhyGift() {
 				for (let i = startIndex; i <= data.length - 1; i++) {
 					checkNames(data[i][2]) ? arr.push(i) : null
 				}
+				checkbox[sN.indexOf(select)][i] = !checkbox[sN.indexOf(select)][i]
 			} else {
 				for (let i = startIndex; i < programsName![programsName?.indexOf(name)! + 1][1]; i++) {
 					checkNames(data[i][2]) ? arr.push(i) : null
 				}
+				checkbox[sN.indexOf(select)][i] = !checkbox[sN.indexOf(select)][i]
 			}
 			unPushArr(arr)
 		}
@@ -203,7 +223,7 @@ function KhyGift() {
 			<div style={{display: 'flex', flexDirection: "row"}}>
 				<FileUpload handleFile={handleFile}/>
 				<FormControl sx={{m: 1, minWidth: 120}} size="small">
-					<InputLabel id="demo-select-small">골라라ㅋ</InputLabel>
+					<InputLabel id="demo-select-small">선택해쥬</InputLabel>
 					<Select
 						labelId="demo-select-small"
 						id="demo-select-small"
@@ -219,12 +239,23 @@ function KhyGift() {
 				<Button variant="outlined" onClick={handleClickOpen}>
 					버튼
 				</Button>
+				<Button variant="outlined" onClick={() => checkOut()}>
+					해제
+				</Button>
+
+				<Button variant="outlined"
+								onClick={() => setArr(Array.from({length: wb.SheetNames.length}, () => Array().fill([])))
+								}>
+					모두 해제
+				</Button>
 				<ArrView arr={arr} sN={sN}/>
 			</div>
 			<div style={{display: "flex", flexDirection: "row", fontSize: "11px"}}>
 				{programsName?.map((name, i) => (
 					<div key={i} style={{display: "flex", flexDirection: "row"}}>
-						<Checkbox ref={checkRef} onChange={(e) => pushPrograms(name, e.target.checked)}/>
+						<Checkbox
+							checked={checkbox[sN.indexOf(select)][i]}
+							ref={checkRef} onChange={(e) => pushPrograms(name, e.target.checked, i)}/>
 						<div>{name[0]}</div>
 					</div>
 				))}

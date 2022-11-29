@@ -12,6 +12,7 @@ import useGetYMD from "../../hooks/useGetYMD";
 import GridUserChange from "./gridUserChange";
 import { createTheme, ThemeProvider } from "@mui/material";
 import axios from "axios";
+import useGetYMDHM from "../../hooks/useGetYMDHM";
 
 export interface tUSER {
   id?: number;
@@ -37,7 +38,7 @@ function AdminUser() {
 
       const newData: tUSER[] = [];
       data?.map((user: tUSER) => {
-        const created = useGetYMD(new Date(user.created));
+        const created = useGetYMDHM(new Date(user.created));
         newData.push({ ...user, created });
       });
 
@@ -74,7 +75,7 @@ function AdminUser() {
   );
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 600, width: 800 }}>
       {users ? (
         <ThemeProvider theme={theme}>
           <DataGrid
@@ -90,7 +91,7 @@ function AdminUser() {
               { field: "userGender", headerName: "성별" },
               { field: "userBirthDay", headerName: "생년월일" },
               { field: "userSchool", headerName: "학교" },
-              { field: "created", headerName: "가입일" },
+              { field: "created", headerName: "가입일", width: 200 },
             ]}
             rows={users}
             density="compact"
