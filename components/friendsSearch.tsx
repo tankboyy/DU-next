@@ -57,11 +57,6 @@ export default function FriendsSearch() {
 	const [arr, setArr] = useState<boolean[]>([]);
 	const [loading, setLoading] = useState(false);
 
-	const onTimeZero = () => {
-		setIsStep(1)
-		setPlayers([])
-	}
-
 	useEffect(() => {
 		const {filIds} = useIdSearchToss({search, userData})
 		setFriends(filIds);
@@ -81,6 +76,7 @@ export default function FriendsSearch() {
 
 	useEffect(() => {
 		setLoading(true);
+		getGamesData()
 		useGetIds().then(({users, data, data2}) => {
 			setUserData(users);
 			setUserIds(data);
@@ -88,6 +84,7 @@ export default function FriendsSearch() {
 			setLoading(false);
 		});
 	}, []);
+	console.log("zzz")
 
 	const userSelection = (name: string) => {
 		if (!players.includes(name)) setPlayers([...players, name]);
@@ -108,12 +105,13 @@ export default function FriendsSearch() {
 	const onClickStepDown = () => {
 		setIsStep(isStep - 1);
 	};
+
 	const onClickStepUp = () => {
 		setIsStep(isStep + 1);
-		getGamesData();
 	};
 
 	const onClickButton = (name: string) => {
+				console.log(name, gameData)
 		gameData?.map((item) => {
 			if (item.id === name) {
 				setSelectGame(item);

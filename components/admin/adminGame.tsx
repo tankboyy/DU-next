@@ -53,12 +53,11 @@ const AdminGame: React.FC<P> = (props) => {
 					})
 					setGames(newData!)
 				})
-				console.log("60000", new Date())
 			}, 60000)
 		}
+		console.log("60000", new Date())
 		return () => getDatas()
 	}, [games]);
-
 
 
 	useEffect(() => {
@@ -85,25 +84,32 @@ const AdminGame: React.FC<P> = (props) => {
 							<div>
 								<Grid container spacing={2}>
 									<Grid item xs={6} md={8}>
-										<AdminGameList gameData={games!.컴퓨터} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.컴퓨터} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={4}>
-										<AdminGameList gameData={games!.플스} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.플스} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={6}>
-										<AdminGameList gameData={games!.탁구} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.탁구} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={6}>
-										<AdminGameList gameData={games!.축구} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.축구} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={6}>
-										<AdminGameList gameData={games!.오락기} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.오락기} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={6}>
-										<AdminGameList gameData={games!.포켓볼} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.포켓볼} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={10}>
-										<AdminGameList gameData={games!.충전} gamesData={games!} setGames={setGames} setAdmin={props.setAdmin1}/>
+										<AdminGameList gameData={games!.충전} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 								</Grid>
 								<div>

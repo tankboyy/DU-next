@@ -45,7 +45,6 @@ function Step1(props: Step) {
 	// 	const set = new Set(arr);
 	// 	setFriends([...set]);
 	// }, [search]);
-
 	return (
 		<div>
 			<Stack

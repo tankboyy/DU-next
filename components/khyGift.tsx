@@ -96,7 +96,6 @@ function KhyGift() {
 			const pushData = arr[i].map(item => data[item]);
 			newArr[i] = pushData
 		})
-		console.log("map", [getResult(newArr.flat()), newArr.flat()])
 		setResultData([getResult(newArr.flat()), newArr.flat()])
 		setOpen(true);
 	};
@@ -150,7 +149,6 @@ function KhyGift() {
 		else reader.readAsArrayBuffer(file);
 
 	}
-	const checkRef = useRef(null)
 
 	const pushArr = (i: number[]) => {
 		const prevArr = [...arr]
@@ -255,7 +253,7 @@ function KhyGift() {
 					<div key={i} style={{display: "flex", flexDirection: "row"}}>
 						<Checkbox
 							checked={checkbox[sN.indexOf(select)][i]}
-							ref={checkRef} onChange={(e) => pushPrograms(name, e.target.checked, i)}/>
+							onChange={(e) => pushPrograms(name, e.target.checked, i)}/>
 						<div>{name[0]}</div>
 					</div>
 				))}
