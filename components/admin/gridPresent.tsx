@@ -294,7 +294,7 @@ function GridPresent({ data }: { data: GAMELOG[] }) {
     const wb = utils.book_new();
     utils.book_append_sheet(wb, ws, "Sheet1");
 
-    writeFile(wb, "Test.xlsx");
+    writeFile(wb, "Test.xls");
   }
 
   const lastF = () => {
