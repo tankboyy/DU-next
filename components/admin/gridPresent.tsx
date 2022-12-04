@@ -256,7 +256,7 @@ function GridPresent({ data }: { data: GAMELOG[] }) {
     console.log(mountData)
     utils.book_append_sheet(wb, ws, "Sheet1");
 
-    writeFile(wb, "Test.xlsx");
+    writeFile(wb, "Test.xls");
   }
 
   async function onClick2() {
