@@ -29,6 +29,8 @@ export const gameNames = [
 	"충전",
 	"책마루",
 	"보드게임",
+	"스위치",
+	"노래방"
 ];
 
 interface Tgame {
@@ -202,7 +204,7 @@ export default function FriendsSearch() {
 					)}
 					{isStep === 2 && (
 						<div>
-							<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>
+							{/*<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>*/}
 							<Step2
 								arr={arr}
 								checked={checked}

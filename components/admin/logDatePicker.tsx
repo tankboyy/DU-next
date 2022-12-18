@@ -45,6 +45,8 @@ export default function LogDatePicker({
           책마루: [],
           충전: [],
           신규가입: [],
+          스위치: [],
+          노래방: [],
         };
       // if(checkedData[useGetYMDHM(new Date(item.currentTime)).split(" ")[0]][item.gameName])
       if (

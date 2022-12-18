@@ -64,6 +64,10 @@ const nextConfig = {
         source: "/api/users/login",
         destination: `${process.env.API_URL}:3001/users/login`,
       },
+      {
+        source: "/api/profit1",
+        destination: `${process.env.API_URL}:3001/api/ss`,
+      },
     ];
   },
 };

@@ -13,6 +13,8 @@ export type Tgames = {
 	축구: GAMETYPE
 	포켓볼: GAMETYPE
 	충전: GAMETYPE
+	스위치: GAMETYPE
+	노래방: GAMETYPE
 }
 
 interface P {
@@ -70,12 +72,19 @@ const AdminGame: React.FC<P> = (props) => {
 		})
 	}, [])
 
+	const handleChangeClick = () => {
+
+	}
+
 	return (
 		<div>
 			불러온 시간: {new Date().getHours()}시 {new Date().getMinutes()}분 {new Date().getSeconds()}초
 			<Button variant="text" onClick={getGames2}>
 				<AutorenewIcon/>
 			</Button>
+			{props.setAdmin1 ? <div>
+				<button onClick={handleChangeClick}>수정</button>
+			</div> : null}
 			{loading ? <div>로딩중...</div> :
 				<div>
 
@@ -83,11 +92,11 @@ const AdminGame: React.FC<P> = (props) => {
 						<div>
 							<div>
 								<Grid container spacing={2}>
-									<Grid item xs={6} md={8}>
+									<Grid item xs={6} md={6}>
 										<AdminGameList gameData={games!.컴퓨터} gamesData={games!} setGames={setGames}
 																	 setAdmin={props.setAdmin1}/>
 									</Grid>
-									<Grid item xs={6} md={4}>
+									<Grid item xs={6} md={6}>
 										<AdminGameList gameData={games!.플스} gamesData={games!} setGames={setGames}
 																	 setAdmin={props.setAdmin1}/>
 									</Grid>
@@ -105,6 +114,14 @@ const AdminGame: React.FC<P> = (props) => {
 									</Grid>
 									<Grid item xs={6} md={6}>
 										<AdminGameList gameData={games!.포켓볼} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
+									</Grid>
+									<Grid item xs={6} md={6}>
+										<AdminGameList gameData={games!.스위치} gamesData={games!} setGames={setGames}
+																	 setAdmin={props.setAdmin1}/>
+									</Grid>
+									<Grid item xs={6} md={6}>
+										<AdminGameList gameData={games!.노래방} gamesData={games!} setGames={setGames}
 																	 setAdmin={props.setAdmin1}/>
 									</Grid>
 									<Grid item xs={6} md={10}>

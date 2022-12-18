@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 function TimerComponent(props: {setIsStep: React.Dispatch<React.SetStateAction<number>>, setSearch: React.Dispatch<React.SetStateAction<string>>, setPlayers: React.Dispatch<React.SetStateAction<string[]>>}) {
-	const [seconds, setSeconts] = useState<number>(30)
+	const [seconds, setSeconts] = useState<number>(50)
 	useEffect(() => {
 		setTimeout(() => {
 			setSeconts(seconds - 1)

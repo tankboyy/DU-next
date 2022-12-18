@@ -32,7 +32,8 @@ function AdminTest() {
 		}
 	}
 	const getUsers = async () => {
-		await axios.get(`api/users`).then(({data}) => setUsers(data))
+		await axios.get(`https://www.osan.go.kr/culturehome/facilitiesRent/calForm.do?kind=multipurposeRoom&mId=0402010100`)
+			.then((data) => console.log(data))
 	}
 
 	const test = () => {
@@ -40,7 +41,7 @@ function AdminTest() {
 		let user: string = "오석중"
 		let userData: any[]
 		users.map(item => {
-			if(user === item.userId) {
+			if (user === item.userId) {
 				console.log(userData, item)
 			}
 			userData = item
