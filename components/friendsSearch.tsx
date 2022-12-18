@@ -204,7 +204,7 @@ export default function FriendsSearch() {
 					)}
 					{isStep === 2 && (
 						<div>
-							{/*<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>*/}
+							<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>
 							<Step2
 								arr={arr}
 								checked={checked}
