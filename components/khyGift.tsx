@@ -93,9 +93,11 @@ function KhyGift() {
 			if (arr[i].length === 0) return
 			const ws = wb.Sheets[item];
 			const data = utils.sheet_to_json(ws, {header: 1});
-			const pushData = arr[i].map(item => data[item]);
+			const pushData = arr[i].map(item => data[item + 2]);
 			newArr[i] = pushData
 		})
+
+		console.log(newArr)
 		setResultData([getResult(newArr.flat()), newArr.flat()])
 		setOpen(true);
 	};
@@ -129,6 +131,7 @@ function KhyGift() {
 		choiceWs(select)
 		if (sN) setIndex(sN.indexOf(select))
 	}, [select])
+
 
 	const handleFile = (file: any) => {
 		const reader = new FileReader();
@@ -185,6 +188,7 @@ function KhyGift() {
 
 	const pushPrograms = (name: any[], checked: boolean, i: number) => {
 		// 마지막 체크박스 클릭했을시
+		console.log(name, checked, i, [name[1]], data, programsName)
 		const startIndex: number = name[1]
 		const arr: number[] = []
 		if (checked) {
