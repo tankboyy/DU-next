@@ -55,9 +55,9 @@ function KhyGift() {
 
 	const getResult = (data: any[][]) => {
 		const result: any[] = Array.from({length: 19}).fill(0)
-		let first: number[] = []
+		let first: string[] = []
 		data.map((item, i) => {
-			first.push(parseFloat(item[3]))
+			first.push(item[3])
 			result[6] += item[6]
 			result[7] += item[7]
 			result[8] += item[8]
@@ -76,11 +76,11 @@ function KhyGift() {
 		result[2] = data.length
 		result[1] = "메롱"
 		result[0] = "정리"
-		const newFirst: number[] = []
+		const newFirst: string[] = []
 		first.forEach((item) => {
-			if (!newFirst.includes(item)) newFirst.push(item)
+			if (!newFirst.includes(String(item))) newFirst.push(String(item))
 		})
-		newFirst.sort((a, b) => a - b)
+		// newFirst.sort((a, b) => a - b)
 		result[3] = newFirst.join(", ")
 		const title = ["", "", "", "일시", "계", "소계", "초등", "중등", "고등", "대학", "비학", "남", "여", "소계", "성인", "아동", "남", "여", "비율"]
 		return [title, [...result]]
@@ -96,8 +96,6 @@ function KhyGift() {
 			const pushData = arr[i].map(item => data[item + 2]);
 			newArr[i] = pushData
 		})
-
-		console.log(newArr)
 		setResultData([getResult(newArr.flat()), newArr.flat()])
 		setOpen(true);
 	};
