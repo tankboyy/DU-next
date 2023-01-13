@@ -86,7 +86,6 @@ export default function FriendsSearch() {
 			setLoading(false);
 		});
 	}, []);
-	console.log("zzz")
 
 	const userSelection = (name: string) => {
 		if (!players.includes(name)) setPlayers([...players, name]);

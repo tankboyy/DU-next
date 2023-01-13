@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
+import { GAMETYPE } from "../types";
+import { useQuery } from "react-query";
+import { queryClient } from "../../pages/_app";
 
 
 function AdminTest() {
@@ -49,19 +52,20 @@ function AdminTest() {
 		})
 	}
 
+
 	return (
 		<>
 			<div>
-				<button onClick={() => getUsers()}>GetUsers</button>
-				<button onClick={() => test()}>22</button>
-				<input type="text" onChange={(e) => setData(e.target.value)}/>
-				<button onClick={() => onClick()}>asd</button>
-				<DaumPostcode
-					onSearch={handle.asd}
-					onComplete={handle.selectAddress}  // 값을 선택할 경우 실행되는 이벤트
-					autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-					defaultQuery='오산로 235' // 팝업을 열때 기본적으로 입력되는 검색어
-				/>
+				{/*<button onClick={() => getUsers()}>GetUsers</button>*/}
+				{/*<button onClick={() => test()}>22</button>*/}
+				{/*<input type="text" onChange={(e) => setData(e.target.value)}/>*/}
+				{/*<button onClick={() => onClick()}>asd</button>*/}
+				{/*<DaumPostcode*/}
+				{/*	onSearch={handle.asd}*/}
+				{/*	onComplete={handle.selectAddress}  // 값을 선택할 경우 실행되는 이벤트*/}
+				{/*	autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정*/}
+				{/*	defaultQuery='오산로 235' // 팝업을 열때 기본적으로 입력되는 검색어*/}
+				{/*/>*/}
 			</div>
 		</>
 	);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AdminGameList from "./adminGameList";
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import axios from "axios";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
 import { GAMETYPE } from "../types";
+import { useQuery } from "react-query";
 
 export type Tgames = {
 	탁구: GAMETYPE
@@ -31,63 +31,23 @@ const AdminGame: React.FC<P> = (props) => {
 		})
 	}
 
-	async function getGames2() {
-		setLoading(true)
-		axios.get(`api/game`)
-			.then(({data}) => {
-				let newData: Tgames
-				data.map((item: GAMETYPE) => {
-					newData = {...newData, [item.id]: item}
-				})
-				setGames(newData!)
-				setLoading(false)
-			})
-	}
-
-
-	useEffect(() => {
-		const getDatas = () => {
-			setTimeout(() => {
-				getGames().then(data => {
-					let newData: Tgames
-					data.map((item: GAMETYPE) => {
-						newData = {...newData, [item.id]: item}
-					})
-					setGames(newData!)
-				})
-			}, 60000)
-		}
-		console.log("60000", new Date())
-		return () => getDatas()
-	}, [games]);
-
-
-	useEffect(() => {
-		getGames().then(data => {
+	const gamesQuery = useQuery("gamesData", () => getGames(), {
+		staleTime: 60000,
+		onSuccess: (data) => {
 			let newData: Tgames
 			data.map((item: GAMETYPE) => {
 				newData = {...newData, [item.id]: item}
 			})
-			setGames(newData!)
-		})
-	}, [])
+			setGames(newData!);
+		}
+	})
 
-	const handleChangeClick = () => {
-
-	}
 
 	return (
 		<div>
 			불러온 시간: {new Date().getHours()}시 {new Date().getMinutes()}분 {new Date().getSeconds()}초
-			<Button variant="text" onClick={getGames2}>
-				<AutorenewIcon/>
-			</Button>
-			{props.setAdmin1 ? <div>
-				<button onClick={handleChangeClick}>수정</button>
-			</div> : null}
 			{loading ? <div>로딩중...</div> :
 				<div>
-
 					{games ?
 						<div>
 							<div>
@@ -130,11 +90,9 @@ const AdminGame: React.FC<P> = (props) => {
 									</Grid>
 								</Grid>
 								<div>
-									{/*<AdminGameList gameData={games.c} gamesData={} setGames={}*/}
-									{/*{games?.map((game: GAMETYPE) => (*/}
-									{/*	<AdminGameList key={game.id} gameData={game} gamesData={games} setGames={setGames}/>*/}
-									{/*))}*/}
 								</div>
+
+
 							</div>
 
 						</div> :

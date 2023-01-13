@@ -260,6 +260,7 @@ function GridPresent({ data }: { data: GAMELOG[] }) {
   }
 
   async function onClick2() {
+    console.log(typingData)
     let result = typing(typingData);
 
     // let result: any[] = []
