@@ -1,6 +1,6 @@
 const useEndTime = (startTime: Date, plus: number): number => {
 	const endTime = new Date(startTime)
-	endTime.setMinutes(endTime.getMinutes() + 40)
+	endTime.setMinutes(endTime.getMinutes() + plus)
 	return Math.floor((endTime.getTime() - new Date().getTime())/ 1000 / 60)
 }
 

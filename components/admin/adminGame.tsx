@@ -4,6 +4,8 @@ import { Grid } from "@mui/material";
 import axios from "axios";
 import { GAMETYPE } from "../types";
 import { useQuery } from "react-query";
+import { useGetGameData } from "../../hooks/games";
+import { queryClient } from "../../pages/_app";
 
 export type Tgames = {
 	탁구: GAMETYPE
@@ -25,23 +27,37 @@ const AdminGame: React.FC<P> = (props) => {
 	const [games, setGames] = useState<Tgames>()
 	const [loading, setLoading] = useState(false)
 
-	async function getGames() {
-		return await axios.get(`api/game`).then(({data}) => {
-			return data
-		})
-	}
 
-	const gamesQuery = useQuery("gamesData", () => getGames(), {
-		staleTime: 60000,
-		onSuccess: (data) => {
-			let newData: Tgames
-			data.map((item: GAMETYPE) => {
-				newData = {...newData, [item.id]: item}
+
+
+	// const gamesQuery = useQuery("gamesData", () => getGames(), {
+	// 	staleTime: 60000,
+	// 	onSuccess: (data) => {
+	// 		console.log(data)
+	// 		let newData: Tgames
+	// 		data.map((item: GAMETYPE) => {
+	// 			newData = {...newData, [item.id]: item}
+	// 		})
+	// 		setGames(newData!);
+	// 	}
+	// })
+
+	const data = useGetGameData();
+	console.log(data)
+
+	useEffect(() => {
+		console.log("useEffect")
+		if (queryClient.getQueryState("gamesData")?.status === "success") {
+			// @ts-ignore
+			const {data}: {data: GAMETYPE[] | undefined} = queryClient.getQueryData("gamesData");
+			console.log(data)
+			let newData: Tgames;
+			data?.map((item: GAMETYPE) => {
+				newData = {...newData, [item.id]: item};
 			})
 			setGames(newData!);
 		}
-	})
-
+	}, [queryClient.getQueryState("gamesData")?.status])
 
 	return (
 		<div>

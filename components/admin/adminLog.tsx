@@ -23,9 +23,6 @@ function AdminLog() {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarDensitySelector />
         <GridToolbarExport />
         <GridPresent data={gameLogs} />
       </GridToolbarContainer>

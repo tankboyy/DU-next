@@ -56,9 +56,6 @@ function AdminUser() {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
-        <GridToolbarDensitySelector />
         <GridToolbarExport />
         <GridUserChange user={user} users={users} setUsers={setUsers} />
       </GridToolbarContainer>

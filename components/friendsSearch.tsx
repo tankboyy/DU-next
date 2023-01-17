@@ -6,6 +6,7 @@ import { useGetIds } from "../hooks/useGetIds";
 import UseBackDrop from "./useBackDrop";
 import { useIdSearchToss } from "../hooks/useIdSearchToss";
 import TimerComponent from "./timerComponent";
+import { useMutation } from "react-query";
 
 export interface User {
 	created: string;
@@ -57,33 +58,17 @@ export default function FriendsSearch() {
 	const [checked, setChecked] = useState(false);
 	const [backDrop, setBackDrop] = useState(false);
 	const [arr, setArr] = useState<boolean[]>([]);
-	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const {filIds} = useIdSearchToss({search, userData})
 		setFriends(filIds);
 	}, [search]);
 
-	const getGamesData = async () => {
-		setGamesLoading(true);
-		let games: Tgames[];
-		// await graphqlReq.request(GET_GAMES)
-		await axios.get(`api/game`).then(({data}) => {
-			games = data;
-			games.push({id: "보드게임"}, {id: "책마루"});
-			setGamesLoading(false);
-			setGameData(games);
-		});
-	};
-
 	useEffect(() => {
-		setLoading(true);
-		getGamesData()
 		useGetIds().then(({users, data, data2}) => {
 			setUserData(users);
 			setUserIds(data);
 			setCho(data2);
-			setLoading(false);
 		});
 	}, []);
 
@@ -112,7 +97,7 @@ export default function FriendsSearch() {
 	};
 
 	const onClickButton = (name: string) => {
-				console.log(name, gameData)
+		console.log(name, gameData)
 		gameData?.map((item) => {
 			if (item.id === name) {
 				setSelectGame(item);
@@ -129,11 +114,18 @@ export default function FriendsSearch() {
 		setBackDrop(true);
 		setChecked(false);
 		if (selectGame!.id === "책마루" || selectGame!.id === "보드게임") {
-			axios
-				.post(`api/game/boardG`, {
-					name: selectGame!.id,
-					userIds: [...players],
-				})
+			const {mutate, isLoading, isError, error, isSuccess} = useMutation(() => axios.post('api/game/boardG', {
+				name: selectGame!.id,
+				userIds: [...players],
+			}), {
+				onSuccess: () => {
+					console.log("mutation 성공")
+				}
+			})
+			axios.post(`api/game/boardG`, {
+				name: selectGame!.id,
+				userIds: [...players],
+			})
 				.then(() => {
 					setBackDrop(false);
 					setArr([]);
@@ -147,12 +139,11 @@ export default function FriendsSearch() {
 					alert("관리자한테 문의하세요");
 				});
 		} else {
-			axios
-				.post(`api/game/resG`, {
-					name: selectGame!.id,
-					userIds: [...players],
-					select: arr,
-				})
+			axios.post(`api/game/resG`, {
+				name: selectGame!.id,
+				userIds: [...players],
+				select: arr,
+			})
 				.then(() => {
 					setBackDrop(false);
 					setPlayers([]);
@@ -183,48 +174,44 @@ export default function FriendsSearch() {
 
 	return (
 		<div style={{marginTop: 20}}>
-			{loading ? (
-				<div>로딩중...</div>
-			) : (
-				<div>
-					{isStep === 1 && (
-						<Step1
-							setFriends={setFriends}
-							userIds={userIds}
-							cho={cho}
-							friends={friends}
-							userSelection={userSelection}
-							onClickStepUp={onClickStepUp}
+			<div>
+				{isStep === 1 && (
+					<Step1
+						setFriends={setFriends}
+						userIds={userIds}
+						cho={cho}
+						friends={friends}
+						userSelection={userSelection}
+						onClickStepUp={onClickStepUp}
+						players={players}
+						handleDelete={handleDelete}
+						search={search}
+						setSearch={setSearch}
+					/>
+				)}
+				{isStep === 2 && (
+					<div>
+						<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>
+						<Step2
+							arr={arr}
+							checked={checked}
+							gameData={gameData}
+							setArr={setArr}
+							setGameData={setGameData}
+							setChecked={setChecked}
 							players={players}
 							handleDelete={handleDelete}
-							search={search}
-							setSearch={setSearch}
+							onClickStepDown={onClickStepDown}
+							gamesLoading={gamesLoading}
+							handleClose={handleClose}
+							onClickButton={onClickButton}
+							selectGame={selectGame}
+							setSelectGame={setSelectGame}
+							onReverse={onReverse}
 						/>
-					)}
-					{isStep === 2 && (
-						<div>
-							<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>
-							<Step2
-								arr={arr}
-								checked={checked}
-								gameData={gameData}
-								setArr={setArr}
-								setGameData={setGameData}
-								setChecked={setChecked}
-								players={players}
-								handleDelete={handleDelete}
-								onClickStepDown={onClickStepDown}
-								gamesLoading={gamesLoading}
-								handleClose={handleClose}
-								onClickButton={onClickButton}
-								selectGame={selectGame}
-								setSelectGame={setSelectGame}
-								onReverse={onReverse}
-							/>
-						</div>
-					)}
-				</div>
-			)}
+					</div>
+				)}
+			</div>
 			<UseBackDrop bdOpen={backDrop}/>
 		</div>
 	);
