@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { GAMETYPE } from "../types";
-import { useQuery } from "react-query";
 import { queryClient } from "../../pages/_app";
 
 

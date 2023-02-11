@@ -66,7 +66,7 @@ function GameView({
             // flexDirection: "center",
           }}
         >
-          {data.id}
+          {data.id}ㅋ
         </Typography>
         <Typography variant="h6">바로 예약누르시면 됩니다.</Typography>
       </div>

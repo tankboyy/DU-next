@@ -226,7 +226,7 @@ export default function RegisterPage() {
               가입
             </Button>
           </form>
-          <Link>이미 아이디가 있습니다!</Link>
+          <Link href="/login">이미 아이디가 있습니다!</Link>
         </Container>
       </Box>
     </div>

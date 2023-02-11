@@ -6,7 +6,9 @@ import { useGetIds } from "../hooks/useGetIds";
 import UseBackDrop from "./useBackDrop";
 import { useIdSearchToss } from "../hooks/useIdSearchToss";
 import TimerComponent from "./timerComponent";
-import { useMutation } from "react-query";
+import { useGetGamesData, useMutationBoardGame, useMutationGame } from "../hooks/games";
+import { GAMETYPE } from "./types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface User {
 	created: string;
@@ -45,6 +47,9 @@ export type Tgames = {
 };
 
 export default function FriendsSearch() {
+
+	const queryClient = useQueryClient();
+
 	const [friends, setFriends] = useState<string[]>([]);
 	const [players, setPlayers] = useState<string[]>([]);
 	const [cho, setCho] = useState<string[]>([]);
@@ -58,6 +63,9 @@ export default function FriendsSearch() {
 	const [checked, setChecked] = useState(false);
 	const [backDrop, setBackDrop] = useState(false);
 	const [arr, setArr] = useState<boolean[]>([]);
+
+	const boardGameR = useMutationBoardGame();
+	const gameR = useMutationGame();
 
 	useEffect(() => {
 		const {filIds} = useIdSearchToss({search, userData})
@@ -95,13 +103,12 @@ export default function FriendsSearch() {
 	const onClickStepUp = () => {
 		setIsStep(isStep + 1);
 	};
+	const queryData = useGetGamesData();
 
 	const onClickButton = (name: string) => {
-		console.log(name, gameData)
-		gameData?.map((item) => {
-			if (item.id === name) {
-				setSelectGame(item);
-			}
+		const gameData = queryData?.data?.data
+		gameData?.map((item: GAMETYPE) => {
+			if (item.id === name) setSelectGame(item)
 		});
 	};
 
@@ -110,61 +117,100 @@ export default function FriendsSearch() {
 		setSearch("");
 	}
 
+
 	const onReverse = async () => {
-		setBackDrop(true);
 		setChecked(false);
-		if (selectGame!.id === "책마루" || selectGame!.id === "보드게임") {
-			const {mutate, isLoading, isError, error, isSuccess} = useMutation(() => axios.post('api/game/boardG', {
-				name: selectGame!.id,
-				userIds: [...players],
-			}), {
-				onSuccess: () => {
-					console.log("mutation 성공")
-				}
-			})
-			axios.post(`api/game/boardG`, {
-				name: selectGame!.id,
-				userIds: [...players],
-			})
-				.then(() => {
-					setBackDrop(false);
-					setArr([]);
-					setPlayers([]);
-					alert("예약 성공!");
-					setSelectGame(null);
-					setChecked(false);
-				})
-				.catch(() => {
-					setBackDrop(false);
-					alert("관리자한테 문의하세요");
-				});
-		} else {
-			axios.post(`api/game/resG`, {
-				name: selectGame!.id,
-				userIds: [...players],
-				select: arr,
-			})
-				.then(() => {
-					setBackDrop(false);
-					setPlayers([]);
-					alert("예약 성공!");
-					setSelectGame(null);
-					arr.map((item, i) => {
-						if (!item) arr[i] = false;
-					});
-					axios.post(`api/logs/addlog`, {
-						gameName: selectGame!.id,
-						userId: [...players],
-						select: arr,
-					});
-				})
-				.catch((err) => {
-					alert("하루에 한 번만 하실 수 있습니다.");
-					setBackDrop(false);
-					setArr([]);
-				});
-		}
+		setBackDrop(true);
+		if (selectGame!.id === "책마루" || selectGame!.id === "보드게임") boardGameR.mutate({
+			name: selectGame!.id,
+			userIds: [...players]
+		}, {
+			onSuccess: () => {
+				queryClient.invalidateQueries(["gamesData"])
+				setBackDrop(false);
+				setArr([]);
+				setPlayers([]);
+				alert("예약 성공!");
+				setSelectGame(null);
+				setChecked(false);
+			},
+			onError: (error) => {
+				setBackDrop(false);
+				console.log(error)
+				alert("관리자한테 문의하세요");
+			}
+		})
+		else gameR.mutate({name: selectGame!.id, userIds: [...players], select: arr}, {
+			onSuccess: () => {
+				console.log(selectGame!.id)
+				queryClient.resetQueries(["gamesData"])
+				setBackDrop(false);
+				setPlayers([]);
+				alert("예약 성공!");
+				setSelectGame(null);
+			},
+			onError: (error) => {
+				alert("하루에 한 번만 하실 수 있습니다.");
+				setBackDrop(false);
+				console.log(error)
+				setArr([]);
+			}
+		})
+		// 	axios.post(`api/game/boardG`, {
+		// 		name: selectGame!.id,
+		// 		userIds: [...players],
+		// 	})
+		// 		.then(() => {
+		// 			setBackDrop(false);
+		// 			setArr([]);
+		// 			setPlayers([]);
+		// 			alert("예약 성공!");
+		// 			setSelectGame(null);
+		// 			setChecked(false);
+		// 		})
+		// 		.catch(() => {
+		//
+		// 		});
+		// } else {
+		//
+		//
+		// 			axios.post(`api/logs/addlog`, {
+		// 				gameName: selectGame!.id,
+		// 				userId: [...players],
+		// 				select: arr,
+		// 			});
+		// 			queryClient.invalidateQueries(["gamesData"]);
+		// 		}
+		// 	})
+		//
+		// 	// axios.post(`api/game/resG`, {
+		// 	// 	name: selectGame!.id,
+		// 	// 	userIds: [...players],
+		// 	// 	select: arr,
+		// 	// })
+		// 	// 	.then(() => {
+		// 	// 		setBackDrop(false);
+		// 	// 		setPlayers([]);
+		// 	// 		alert("예약 성공!");
+		// 	// 		setSelectGame(null);
+		// 	// 		arr.map((item, i) => {
+		// 	// 			if (!item) arr[i] = false;
+		// 	// 		});
+		// 	// 		axios.post(`api/logs/addlog`, {
+		// 	// 			gameName: selectGame!.id,
+		// 	// 			userId: [...players],
+		// 	// 			select: arr,
+		// 	// 		});
+		// 	// 	})
+		// 	// 	.catch((err) => {
+		// 	// 		alert("하루에 한 번만 하실 수 있습니다.");
+		// 	// 		setBackDrop(false);
+		// 	// 		setArr([]);
+		// 	// 	});
+		// }
 	};
+
+
 
 	function handleClose() {
 		setArr([]);
@@ -187,11 +233,12 @@ export default function FriendsSearch() {
 						handleDelete={handleDelete}
 						search={search}
 						setSearch={setSearch}
+						setPlayers={setPlayers}
 					/>
 				)}
 				{isStep === 2 && (
 					<div>
-						<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>
+						{/*<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>*/}
 						<Step2
 							arr={arr}
 							checked={checked}

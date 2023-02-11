@@ -13,7 +13,7 @@ function AdminRoot() {
 				<AdminTaps/>
 			) : (
 				<>
-					<p>허가된 유저만 접속이 가능합니다</p>
+					<>허가된 유저만 접속이 가능합니다</>
 					<Link href={"/login"}>
 						go login
 					</Link>

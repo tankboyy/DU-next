@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AdminGameList from "./adminGameList";
 import { Grid } from "@mui/material";
-import axios from "axios";
 import { GAMETYPE } from "../types";
-import { useQuery } from "react-query";
-import { useGetGameData } from "../../hooks/games";
-import { queryClient } from "../../pages/_app";
+import { useGetGamesData } from "../../hooks/games";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type Tgames = {
 	탁구: GAMETYPE
@@ -24,10 +22,11 @@ interface P {
 }
 
 const AdminGame: React.FC<P> = (props) => {
+
+	const queryClient = useQueryClient();
+
 	const [games, setGames] = useState<Tgames>()
 	const [loading, setLoading] = useState(false)
-
-
 
 
 	// const gamesQuery = useQuery("gamesData", () => getGames(), {
@@ -42,14 +41,13 @@ const AdminGame: React.FC<P> = (props) => {
 	// 	}
 	// })
 
-	const data = useGetGameData();
-	console.log(data)
+	const {data, isLoading, fetchStatus} = useGetGamesData()
+	console.log("data", data?.data);
 
 	useEffect(() => {
-		console.log("useEffect")
-		if (queryClient.getQueryState("gamesData")?.status === "success") {
+		if (queryClient.getQueryState(["gamesData"])?.status === "success") {
 			// @ts-ignore
-			const {data}: {data: GAMETYPE[] | undefined} = queryClient.getQueryData("gamesData");
+			const {data}: {data: GAMETYPE[] | undefined} = queryClient.getQueryData(["gamesData"])
 			console.log(data)
 			let newData: Tgames;
 			data?.map((item: GAMETYPE) => {
@@ -57,7 +55,21 @@ const AdminGame: React.FC<P> = (props) => {
 			})
 			setGames(newData!);
 		}
-	}, [queryClient.getQueryState("gamesData")?.status])
+	}, [fetchStatus])
+
+	// useEffect(() => {
+	// 	if (queryClient.getQueryState(["gamesData"])?.status === "success") {
+	// 		// @ts-ignore
+	// 		const {data}: {data: GAMETYPE[] | undefined} = queryClient.getQueryData(["gamesData"])
+	// 		console.log(data)
+	// 		let newData: Tgames;
+	// 		data?.map((item: GAMETYPE) => {
+	// 			newData = {...newData, [item.id]: item};
+	// 		})
+	// 		console.log("setGames")
+	// 		setGames(newData!);
+	// 	}
+	// }, [isLoading])
 
 	return (
 		<div>
