@@ -15,6 +15,8 @@ function MobileReserve(props: PropsType) {
 
 	const reserved = (i: number) => {
 		console.log(`name: 오석중 i: ${i} gameName: ${props.gameName}`)
+
+		// @ts-ignore
 		const a = props.games[props.gameName].users
 
 		const arr = Array(a.length).fill(false);
@@ -22,6 +24,7 @@ function MobileReserve(props: PropsType) {
 		// console.log(useMutationGamesData(props.gameName, ['오석중'], arr));
 	}
 
+	// @ts-ignore
 	const a = props.games[props.gameName]
 	return (
 		<div className="flex justify-center">
