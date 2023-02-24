@@ -7,7 +7,7 @@ import { filterPlayers, playersState } from "../../recoil";
 type dataType = {
 	name: string
 	userIds: string[]
-	select?: boolean[]
+	select?: boolean[
 }
 
 type soloDataType = {name: string, gameNumber: number, userId: string}
