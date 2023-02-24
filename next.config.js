@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-const APIURL = process.env.NODE_ENV === "development" ? "http://localhost" : process.env.API_URL
+const APIURL =
+	//
+	process.env.NODE_ENV === "development" ? "http://localhost" : process.env.API_URL
 console.log('APIURL', APIURL, process.env.NODE_ENV)
 const nextConfig = {
 	reactStrictMode: true,

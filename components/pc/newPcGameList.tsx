@@ -4,11 +4,13 @@ import AdminGameList from "../admin/adminGameList";
 import { GAMETYPE } from "../types";
 import { resSoloGame, useGetGamesData, useResSoloGame } from "../../hooks/reactQuerys/games";
 import { styled } from "@mui/material/styles";
-import { Paper, Stack, Typography } from "@mui/material";
+import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { filterPlayers, playersState } from "../../recoil";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from 'axios';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import useEndTime from "../../hooks/useEndTime";
 
 const Item = styled(Paper)(({theme}) => ({
 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -18,6 +20,7 @@ const Item = styled(Paper)(({theme}) => ({
 	color: theme.palette.text.secondary,
 }));
 
+const gameList = ["축구", "포켓볼", "탁구", "플스", "스위치", "오락기", "컴퓨터", "충전", "노래"]
 
 type PropsType = {}
 
@@ -42,12 +45,16 @@ function NewPcGameList(props: PropsType) {
 		setData(prev);
 	}
 	const queryClient = useQueryClient();
+	console.log(games)
 
 	const onReserve = (gName: string, i: number) => {
 		resSolo.mutate({gameNumber: i, userId: players[0], name: gName}, {
 				onSuccess: async () => {
 					// refetch();
-					await axios.post(`api/logs/addlog`,{gameName: gName, userId: [players[0]]}).then(() => queryClient.invalidateQueries(["gamesData"]))
+					await axios.post(`api/logs/addlog`, {
+						gameName: gName,
+						userId: [players[0]]
+					}).then(() => queryClient.invalidateQueries(["gamesData"]))
 					setPlayers();
 				},
 			}
@@ -58,9 +65,15 @@ function NewPcGameList(props: PropsType) {
 
 	return (
 		<div>
-			<button onClick={() => queryClient.invalidateQueries(["gamesData"])}>asd</button>
-			불러온 시간: {new Date().getHours()}시 {new Date().getMinutes()}분 {new Date().getSeconds()}초
-			{status === 'loading' ? <div>로딩중...</div> :
+			<div className={"flex flex-row"}>
+				<Typography className={"p-2"}>
+					불러온 시간: {new Date().getHours()}시 {new Date().getMinutes()}분 {new Date().getSeconds()}초
+				</Typography>
+				<IconButton onClick={() => queryClient.invalidateQueries(["gamesData"])}>
+					<RestartAltIcon/>
+				</IconButton>
+			</div>
+			{status === 'loading' ? <div>로딩중..zz.</div> :
 				<div className={"flex justify-center"}>
 					{games ?
 						<div>
@@ -74,7 +87,7 @@ function NewPcGameList(props: PropsType) {
 											{item.users.map((user, i) => (
 												<Item className={'pr-0.5 bg-sky-200'} onClick={() => onReserve(item.id, i)}>
 													<Typography variant="body2" className={`${user.userId && "bg-gray-300"}`}>
-														{user.userId === "" ? "빈자리" : user.userId}
+														{user.userId === "" ? "빈자리" : item.id !== "충전" ? `${user.userId} | ${useEndTime(new Date(user.startTime), 40)}분` : user.userId}
 													</Typography>
 												</Item>
 											))}
