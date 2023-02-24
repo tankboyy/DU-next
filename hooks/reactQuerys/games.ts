@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { GAMETYPE } from "../../components/types";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { filterPlayers, playersState } from "../../recoil";
 
 type dataType = {
 	name: string
@@ -7,10 +10,18 @@ type dataType = {
 	select?: boolean[]
 }
 
+type soloDataType = {name: string, gameNumber: number, userId: string}
+
 const gameReserved = (data: dataType) => axios.post('api/game/resG', {
 	name: data.name,
 	userIds: data.userIds,
 	select: data.select
+})
+
+export const resSoloGame = (data: soloDataType) => axios.post('api/game/resSoloG', {
+	name: data.name,
+	userId: data.userId,
+	gameNumber: data.gameNumber
 })
 
 const boardGameReserved = (data: dataType) => axios.post('api/game/resG', {
@@ -18,8 +29,9 @@ const boardGameReserved = (data: dataType) => axios.post('api/game/resG', {
 	userIds: data.userIds,
 })
 
-export const useGetGamesData = () => useQuery(["gamesData"], () => axios.get("api/game"), {
-	staleTime: 60000,
+export const useGetGamesData = () => useQuery(["gamesData"], (): Promise<GAMETYPE[]> => axios.get("api/game").then((data) => data.data), {
+	refetchOnWindowFocus: true,
+	onSuccess: () => console.log("useQuery 성공!")
 });
 
 export const useMutationBoardGame = () => {
@@ -27,6 +39,14 @@ export const useMutationBoardGame = () => {
 	return useMutation((data: dataType) => boardGameReserved(data), {
 		onSuccess: () => {
 			console.log("hi, boardGame")
+		}
+	})
+}
+
+export const useResSoloGame = () => {
+	return useMutation((data: soloDataType) => resSoloGame(data), {
+		onSuccess: async () => {
+			console.log("soloGame successzz")
 		}
 	})
 }
@@ -44,3 +64,4 @@ export const useMutationGame = () => {
 		}
 	})
 }
+

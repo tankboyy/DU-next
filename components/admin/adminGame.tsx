@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminGameList from "./adminGameList";
 import { Grid } from "@mui/material";
 import { GAMETYPE } from "../types";
-import { useGetGamesData } from "../../hooks/games";
+import { useGetGamesData } from "../../hooks/reactQuerys/games";
 import { useQueryClient } from "@tanstack/react-query";
 
 export type Tgames = {
@@ -42,18 +42,16 @@ const AdminGame: React.FC<P> = (props) => {
 	// })
 
 	const {data, isLoading, fetchStatus} = useGetGamesData()
-	console.log("data", data?.data);
 
 	useEffect(() => {
-		if (queryClient.getQueryState(["gamesData"])?.status === "success") {
-			// @ts-ignore
-			const {data}: {data: GAMETYPE[] | undefined} = queryClient.getQueryData(["gamesData"])
-			console.log(data)
-			let newData: Tgames;
-			data?.map((item: GAMETYPE) => {
-				newData = {...newData, [item.id]: item};
-			})
-			setGames(newData!);
+		if(queryClient.getQueryState(["gamesData"])?.status === "success") {
+
+		const data: GAMETYPE[] | undefined = queryClient.getQueryData(["gamesData"])
+		let newData: Tgames;
+		data?.map((item: GAMETYPE) => {
+			newData = {...newData, [item.id]: item};
+		})
+		setGames(newData!);
 		}
 	}, [fetchStatus])
 

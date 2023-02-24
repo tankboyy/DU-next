@@ -4,6 +4,7 @@ import DarkModeToggleButton from "../components/dark-mode";
 import { useMediaQuery } from "react-responsive";
 import { Mobile, Pc } from "../hooks/responsiveHooks";
 import MobileView from "../components/mobile/mobileView";
+import PcView from "../components/pc/index"
 
 export default function Home() {
 	return (
@@ -11,7 +12,7 @@ export default function Home() {
 			<Seo title="Home"/>
 			<div>
 				<Pc>
-					<FriendsSearch />
+					<PcView />
 				</Pc>
 				<Mobile>
 					<MobileView />

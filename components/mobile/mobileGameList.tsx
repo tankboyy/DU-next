@@ -14,7 +14,7 @@ import { styled } from '@material-ui/core';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { useGetGamesData } from "../../hooks/games";
+import { useGetGamesData } from "../../hooks/reactQuerys/games";
 import { GAMETYPE } from "../types";
 import { Tgames } from "../admin/adminGame";
 
@@ -72,28 +72,20 @@ const ColorModeContext = React.createContext({
 function MobileGameList(props: PropsType) {
 
 	const [expanded, setExpanded] = React.useState<string | false>(false);
-	const [games, setGames] = useState<Tgames>();
-
-	const queryClient = useQueryClient()
-
-	useGetGamesData()
-
+	const [games, setGames] = useState<GAMETYPE[]>();
+	const {
+		data,
+		status,
+		fetchStatus
+	}: {data: GAMETYPE[] | undefined, status: string, fetchStatus: string} = useGetGamesData();
 	useEffect(() => {
-		if (queryClient.getQueryState(["gamesData"])?.status === "success") {
-			// @ts-ignore
-			const {data}: {data: GAMETYPE[] | undefined} = queryClient.getQueryData(["gamesData"]);
-			let newData: Tgames;
-			data?.map((item: GAMETYPE) => {
-				newData = {...newData, [item.id]: item};1
-			})
-			setGames(newData!);
-		}
-	}, [queryClient.getQueryState(["gamesData"])?.status])
+		if (status === "success") setGames(data)
+	}, [fetchStatus])
 
-	const handleChange =
-		(panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-			setExpanded(newExpanded ? panel : false);
-		};
+
+	const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+		setExpanded(newExpanded ? panel : false);
+	};
 
 	const theme = useTheme();
 	const colorMode = React.useContext(ColorModeContext);
@@ -102,43 +94,43 @@ function MobileGameList(props: PropsType) {
 		console.log(theme.palette.mode)
 		theme.palette.mode = theme.palette.mode === 'dark' ? 'light' : 'dark'
 	}
-	const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+	// const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 
 	return (
 		<>
-			<Box
-				sx={{
-					display: 'flex',
-					width: '100%',
-					alignItems: 'center',
-					justifyContent: 'center',
-					backgroundColor: 'background.default',
-					color: 'text.primary',
-					borderRadius: 1,
-					p: 3,
+			{/*<Box*/}
+			{/*	sx={{*/}
+			{/*		display: 'flex',*/}
+			{/*		width: '100%',*/}
+			{/*		alignItems: 'center',*/}
+			{/*		justifyContent: 'center',*/}
+			{/*		backgroundColor: 'background.default',*/}
+			{/*		color: 'text.primary',*/}
+			{/*		borderRadius: 1,*/}
+			{/*		p: 3,*/}
 
-				}}
-			>
-				{theme.palette.mode} mode
-				<IconButton sx={{ml: 1}} onClick={() => changeMode()} color="inherit">
-					{theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
-				</IconButton>
-			</Box>
+			{/*	}}*/}
+			{/*>*/}
+			{/*	{theme.palette.mode} mode*/}
+			{/*	<IconButton sx={{ml: 1}} onClick={() => changeMode()} color="inherit">*/}
+			{/*		{theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}*/}
+			{/*	</IconButton>*/}
+			{/*</Box>*/}
 			<Box sx={{gap: 2}}>
 				{games ?
 					<div>
 						{
-							gameNames.map((item, i) => (
+							games.map((item, i) => (
 								<Accordion expanded={expanded === `panel${i + 1}`} onChange={handleChange(`panel${i + 1}`)}>
 									<AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-										<Typography align="center" sx={{width: 1}}>{item}</Typography>
+										<Typography align="center" sx={{width: 1}}>{item.id}</Typography>
 									</AccordionSummary>
 									<AccordionDetails>
 										<Container>
-											{checkedGameName(item) ?
+											{checkedGameName(item.id) ?
 												<div>
-													<MobileReserve games={games} gameName={item} />
+													<MobileReserve games={item}/>
 												</div>
 												: <div>hi2</div>}
 										</Container>

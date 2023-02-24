@@ -66,15 +66,16 @@ export default function RegisterPage() {
     axios
       .post("/api/users/idcheck", { userId })
       .then(({ data }) => {
+        console.log(data)
         setLoading(false);
-        if (data.idCheck === userId) {
+        if (data === userId) {
           alert("사용 가능한 이름(아이디)입니다");
           setValue("userName", userId);
         } else {
-          alert(`이미 ${userId} 님이 있어 ${data.idCheck} 님으로 변경됩니다.
-꼭 >> ${data.idCheck} << 로 로그인부탁드립니다!`);
+          alert(`이미 ${userId} 님이 있어 ${data} 님으로 변경됩니다.
+꼭 >> ${data} << 로 로그인부탁드립니다!`);
           setValue("userName", userId);
-          setValue("userId", data.idCheck);
+          setValue("userId", data);
         }
         setIdChecked(true);
       })

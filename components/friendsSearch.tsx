@@ -6,9 +6,10 @@ import { useGetIds } from "../hooks/useGetIds";
 import UseBackDrop from "./useBackDrop";
 import { useIdSearchToss } from "../hooks/useIdSearchToss";
 import TimerComponent from "./timerComponent";
-import { useGetGamesData, useMutationBoardGame, useMutationGame } from "../hooks/games";
+import { useGetGamesData, useMutationBoardGame, useMutationGame } from "../hooks/reactQuerys/games";
 import { GAMETYPE } from "./types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ReservedUser from "./newComponents/reservedUser";
 
 export interface User {
 	created: string;
@@ -105,8 +106,28 @@ export default function FriendsSearch() {
 	};
 	const queryData = useGetGamesData();
 
+
 	const onClickButton = (name: string) => {
-		const gameData = queryData?.data?.data
+		if(name === "책마루" || name === "보드게임") {
+			console.log('hi')
+			boardGameR.mutate({name, userIds: userIds}, {
+				onSuccess: () => {
+					queryClient.invalidateQueries(["gamesData"])
+					setBackDrop(false);
+					setArr([]);
+					setPlayers([]);
+					alert("예약 성공!");
+					setSelectGame(null);
+					setChecked(false);
+				},
+				onError: (error) => {
+					setBackDrop(false);
+					console.log(error)
+					alert("관리자한테 문의하세요");
+				}
+			})
+		}
+		const gameData = queryData?.data
 		gameData?.map((item: GAMETYPE) => {
 			if (item.id === name) setSelectGame(item)
 		});
@@ -211,7 +232,6 @@ export default function FriendsSearch() {
 	};
 
 
-
 	function handleClose() {
 		setArr([]);
 		setChecked(false);
@@ -219,9 +239,9 @@ export default function FriendsSearch() {
 	}
 
 	return (
-		<div style={{marginTop: 20}}>
-			<div>
-				{isStep === 1 && (
+		<div className="mt-2">
+			<div className="flex justify-center">
+				{isStep === 1 ? (
 					<Step1
 						setFriends={setFriends}
 						userIds={userIds}
@@ -235,8 +255,7 @@ export default function FriendsSearch() {
 						setSearch={setSearch}
 						setPlayers={setPlayers}
 					/>
-				)}
-				{isStep === 2 && (
+				) : isStep === 2 ? (
 					<div>
 						{/*<TimerComponent setIsStep={setIsStep} setSearch={setSearch} setPlayers={setPlayers}/>*/}
 						<Step2
@@ -257,7 +276,10 @@ export default function FriendsSearch() {
 							onReverse={onReverse}
 						/>
 					</div>
-				)}
+				) : "hi"}
+				<div className="mt-20">
+					<ReservedUser />
+				</div>
 			</div>
 			<UseBackDrop bdOpen={backDrop}/>
 		</div>

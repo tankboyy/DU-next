@@ -78,7 +78,7 @@ function Step1(props: Step) {
 					options={props.userIds}
 					sx={{width: 400}}
 					onChange={(e: any, newValue: string[]) => props.setPlayers(newValue)}
-					getOptionLabel={(option) => option}
+					// getOptionLabel={(option) => option}
 					filterSelectedOptions
 					renderInput={(params) => <TextField
 							{...params}
