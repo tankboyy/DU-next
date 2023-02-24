@@ -8,6 +8,7 @@ import { Paper, Stack, Typography } from "@mui/material";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { filterPlayers, playersState } from "../../recoil";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from 'axios';
 
 const Item = styled(Paper)(({theme}) => ({
 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -45,9 +46,10 @@ function NewPcGameList(props: PropsType) {
 	const onReserve = (gName: string, i: number) => {
 		resSolo.mutate({gameNumber: i, userId: players[0], name: gName}, {
 				onSuccess: async () => {
-					setPlayers();
 					// await queryClient.invalidateQueries(["gamesData"])
 					refetch();
+					await axios.post(`api/logs/addlog`,{gameName: gName, userId: [players[0]]})
+					setPlayers();
 				},
 			}
 		)

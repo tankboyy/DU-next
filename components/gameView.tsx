@@ -49,19 +49,19 @@ function GameView({
 
 	async function getGames() {
 		console.log("hi")
-		setLoading(true);
-		await queryClient.invalidateQueries(["gamesData"]).then(() => {
-				const data: GAMETYPE[] | undefined = queryClient.getQueryData(["gamesData"]);
-				if (data) {
-					let newData: Tgames;
-					data?.map((item: GAMETYPE) => {
-						newData = {...newData, [item.id]: item};
-					})
-					console.log(newData)
-					setGameData(newData!);
-				}
-			}
-		)
+		// setLoading(true);
+		// await queryClient.invalidateQueries(["gamesData"]).then(() => {
+		// 		const data: GAMETYPE[] | undefined = queryClient.getQueryData(["gamesData"]);
+		// 		if (data) {
+		// 			let newData: Tgames;
+		// 			data?.map((item: GAMETYPE) => {
+		// 				newData = {...newData, [item.id]: item};
+		// 			})
+		// 			console.log(newData)
+		// 			setGameData(newData!);
+		// 		}
+		// 	}
+		// )
 		// axios.get(`api/game`).then(({ data }) => {
 		//   setGameData(data.games);
 		//   setLoading(false);
