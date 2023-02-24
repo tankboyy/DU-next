@@ -46,9 +46,8 @@ function NewPcGameList(props: PropsType) {
 	const onReserve = (gName: string, i: number) => {
 		resSolo.mutate({gameNumber: i, userId: players[0], name: gName}, {
 				onSuccess: async () => {
-					// await queryClient.invalidateQueries(["gamesData"])
-					refetch();
-					await axios.post(`api/logs/addlog`,{gameName: gName, userId: [players[0]]})
+					// refetch();
+					await axios.post(`api/logs/addlog`,{gameName: gName, userId: [players[0]]}).then(() => queryClient.invalidateQueries(["gamesData"]))
 					setPlayers();
 				},
 			}
