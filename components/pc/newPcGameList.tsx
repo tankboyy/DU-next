@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from "@mui/material/Unstable_Grid2";
 import AdminGameList from "../admin/adminGameList";
 import { GAMETYPE } from "../types";
-import { resSoloGame, useGetGamesData, useResSoloGame } from "../../hooks/reactQuerys/games";
+import { boardGameReserved, resSoloGame, useGetGamesData, useResSoloGame } from "../../hooks/reactQuerys/games";
 import { styled } from "@mui/material/styles";
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -45,7 +45,6 @@ function NewPcGameList(props: PropsType) {
 		setData(prev);
 	}
 	const queryClient = useQueryClient();
-	console.log(games)
 
 	const onReserve = (gName: string, i: number) => {
 		resSolo.mutate({gameNumber: i, userId: players[0], name: gName}, {
@@ -59,7 +58,14 @@ function NewPcGameList(props: PropsType) {
 				},
 			}
 		)
+	}
 
+	const resBoardG = (name: string) => {
+		console.log([players[0]])
+		if(players[0] === undefined) return
+		boardGameReserved({name, userIds: [players[0]]}).then(() => {
+			setPlayers()
+		})
 	}
 
 
@@ -83,7 +89,7 @@ function NewPcGameList(props: PropsType) {
 										<Typography variant="h5">
 											{item.id}
 										</Typography>
-										<Stack direction={{xs: "row", md: "row"}}>
+										<Stack direction={{xs: "row", md: "row"}} spacing={0.5}>
 											{item.users.map((user, i) => (
 												<Item className={'pr-0.5 bg-sky-200'} onClick={() => onReserve(item.id, i)}>
 													<Typography variant="body2" className={`${user.userId && "bg-gray-300"}`}>
@@ -94,6 +100,14 @@ function NewPcGameList(props: PropsType) {
 										</Stack>
 									</Grid>
 								))}
+							</Grid>
+							<Grid container className={"justify-around"}>
+								<Grid>
+									<Typography onClick={() => resBoardG("보드게임")} variant={"h2"}>보드게임</Typography>
+								</Grid>
+								<Grid>
+									<Typography variant={"h2"}>책마루</Typography>
+								</Grid>
 							</Grid>
 						</div>
 						:

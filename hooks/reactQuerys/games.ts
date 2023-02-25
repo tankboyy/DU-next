@@ -24,7 +24,7 @@ export const resSoloGame = (data: soloDataType) => axios.post('api/game/resSoloG
 	gameNumber: data.gameNumber
 })
 
-const boardGameReserved = (data: dataType) => axios.post('api/game/resG', {
+export const boardGameReserved = (data: dataType) => axios.post('api/game/resG', {
 	name: data.name,
 	userIds: data.userIds,
 })

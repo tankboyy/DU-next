@@ -8,7 +8,7 @@ const useGetYMDHM = (date: Date) => {
 	if (minutes < 10) minutes = `0${minutes}`
 	let seconds: string | number = date.getSeconds()
 	if (minutes < 10) seconds = `0${seconds}`
-	return `${YMD} ${hours}:${minutes}`
+	return `${YMD}`
 }
 
 export default useGetYMDHM
