@@ -92,6 +92,10 @@ function NewPcGameList(props: PropsType) {
     console.log([players[0]]);
     if (players[0] === undefined) return;
     boardGameReserved({ name, userIds: [players[0]] }).then(() => {
+      axios.post("/addReserveLog", {
+        gameName: name,
+        userId: players[0],
+      });
       setPlayers();
     });
   };
