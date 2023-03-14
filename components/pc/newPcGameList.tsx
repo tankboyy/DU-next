@@ -102,13 +102,6 @@ function NewPcGameList(props: PropsType) {
 
   return (
     <div>
-      <button
-        onClick={async () => {
-          console.log();
-        }}
-      >
-        asd
-      </button>
       <div className={"flex flex-row"}>
         <Typography className={"p-2"}>
           불러온 시간: {new Date().getHours()}시 {new Date().getMinutes()}분{" "}
