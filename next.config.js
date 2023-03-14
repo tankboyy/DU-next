@@ -5,6 +5,7 @@ const APIURL =
     ? "http://localhost"
     : process.env.API_URL;
 console.log("APIURL", APIURL, process.env.NODE_ENV);
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,

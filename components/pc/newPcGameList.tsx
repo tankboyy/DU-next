@@ -48,6 +48,7 @@ function NewPcGameList(props: PropsType) {
   const resSolo = useMutationNewReservedGame();
   const setData = useSetRecoilState(playersState);
   const players = useRecoilValue(filterPlayers);
+
   useEffect(() => {
     if (status === "success") {
       console.log("success", data);
