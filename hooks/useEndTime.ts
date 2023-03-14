@@ -1,20 +1,21 @@
 const useEndTime = (startTime: Date, plus: number): number => {
+	console.log(startTime);
 	const endTime = new Date(startTime)
 	endTime.setMinutes(endTime.getMinutes() + plus)
 	return Math.floor((endTime.getTime() - new Date().getTime())/ 1000 / 60)
 }
 
 export const getTime = (): string => {
-	let today = new Date();
-	let month: string | number = today.getMonth() + 1
-	if (month < 10) month = `0${month}`
-	let day: string | number = today.getDate();
-	if (day < 10) day = `0${day}`
-	let hours: string | number = today.getHours();
-	if (hours < 10) hours = `0${hours}`
-	let minutes: string | number = today.getMinutes();
-	if (minutes < 10) minutes = `0${minutes}`
-	return `${month}${day}${hours}${minutes}`
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const formattedMonth = month < 10 ? `0${month}` : month;
+  const day = today.getDate();
+  const formattedDay = day < 10 ? `0${day}` : day;
+  const hours = today.getHours();
+  const formattedHours = hours < 10 ? `0${hours}` : hours;
+  const minutes = today.getMinutes();
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  return `${formattedMonth}${formattedDay}${formattedHours}${formattedMinutes}`;
 }
 
 

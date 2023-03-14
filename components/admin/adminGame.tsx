@@ -3,7 +3,7 @@ import AdminGameList from "./adminGameList";
 import { Grid } from "@mui/material";
 import { GAMETYPE } from "../types";
 import { useGetGamesData } from "../../hooks/reactQuerys/games";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "react-query";
 
 export type Tgames = {
 	탁구: GAMETYPE
@@ -41,7 +41,7 @@ const AdminGame: React.FC<P> = (props) => {
 	// 	}
 	// })
 
-	const {data, isLoading, fetchStatus} = useGetGamesData()
+	const {data, isLoading, status} = useGetGamesData()
 
 	useEffect(() => {
 		if(queryClient.getQueryState(["gamesData"])?.status === "success") {
@@ -53,7 +53,7 @@ const AdminGame: React.FC<P> = (props) => {
 		})
 		setGames(newData!);
 		}
-	}, [fetchStatus])
+	}, [status])
 
 	// useEffect(() => {
 	// 	if (queryClient.getQueryState(["gamesData"])?.status === "success") {

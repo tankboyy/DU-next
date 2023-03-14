@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, TextField } from "@mui/material";
-import { useGetIds } from "../hooks/useGetIds";
-import { filterPlayers, playersState } from '../recoil';
+import { useGetIds } from "../../hooks/useGetIds";
+import { filterPlayers, playersState } from '../../recoil';
 import { useRecoilState, useRecoilValue } from "recoil";
 import { log } from "util";
 
