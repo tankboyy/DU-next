@@ -1,6 +1,5 @@
 import React from 'react';
 import { Autocomplete, TextField } from "@mui/material";
-import firebase from "../hooks/firebase";
 
 
 type PropsType = {}

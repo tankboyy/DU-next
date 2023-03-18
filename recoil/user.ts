@@ -21,3 +21,21 @@ export const userState = atom<iUSER>({
   effects_UNSTABLE: [persistAtom],
 });
 
+
+
+const sessionStorage =
+  typeof window !== "undefined" ? window.sessionStorage : undefined;
+
+const persistAtom2 = recoilPersist({
+  key: "userStorage",
+  storage: sessionStorage,
+});
+
+export const userAtom = atom({
+  key: "userState2",
+  default: {
+    userKey: "",
+  },
+  effects_UNSTABLE: [persistAtom2.persistAtom],
+});
+

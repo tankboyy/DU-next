@@ -21,11 +21,9 @@ import { RoundaboutLeftRounded } from "@mui/icons-material";
 function Login() {
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, watch, getValues, setValue } = useForm({
+  const { register, handleSubmit, getValues, setValue } = useForm({
     defaultValues: { userId: "", userPw: "" },
   });
-
-  watch();
 
   const router = useRouter();
 

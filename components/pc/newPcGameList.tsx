@@ -74,6 +74,12 @@ function NewPcGameList(props: PropsType) {
   const queryClient = useQueryClient();
 
   const onReserve = async (gName: string, i: number) => {
+    if(players.length === 0) {
+      setSnackOpen(
+        true
+      )
+      return;
+    }
     setLoading(true);
     const check = await axios.post("/api/logs/checkedLog", {
       gameName: gName,
