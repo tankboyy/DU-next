@@ -8,13 +8,13 @@ type PropsType = {};
 
 function Index(props: PropsType) {
   return (
-    <div className={"flex"}>
+    <div>
       <div>
         <PlayerView />
         <NewUserSearch />
-        <NewPcGameList />
       </div>
-      <div>
+      <div className={"flex"}>
+        <NewPcGameList />
         <BookingUsers />
       </div>
     </div>

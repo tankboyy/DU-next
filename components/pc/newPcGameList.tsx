@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import AdminGameList from "../admin/adminGameList";
-import { GAMETYPE } from "../types";
+import { GAMETYPE, SnackBarType } from "../types";
 import {
   boardGameReserved,
   resSoloGame,
@@ -11,12 +11,12 @@ import {
 } from "../../hooks/reactQuerys/games";
 import { styled } from "@mui/material/styles";
 import {
-  Alert,
+  Alert, AlertColor,
   IconButton,
   Paper,
   Snackbar,
   Stack,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { filterPlayers, playersState } from "../../recoil";
@@ -49,10 +49,16 @@ const gameList = [
 
 type PropsType = {};
 
+
+
 function NewPcGameList(props: PropsType) {
   const [games, setGames] = useState<GameType[]>();
   const [loading, setLoading] = useState(false);
-  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackOpen, setSnackOpen] = useState<SnackBarType>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const { data, status, isFetching } = useGetGamesData();
   const resSolo = useMutationNewReservedGame();
@@ -74,10 +80,12 @@ function NewPcGameList(props: PropsType) {
   const queryClient = useQueryClient();
 
   const onReserve = async (gName: string, i: number) => {
-    if(players.length === 0) {
-      setSnackOpen(
-        true
-      )
+    if (players.length === 0) {
+      setSnackOpen({
+        open: true,
+        message: "유저를 먼저 골라주세요!",
+        severity: "error",
+      });
       return;
     }
     setLoading(true);
@@ -91,7 +99,7 @@ function NewPcGameList(props: PropsType) {
       return;
     }
 
-    setSnackOpen(true)
+    setSnackOpen({ open: true, message: "예약 성공!", severity: "success" });
     resSolo.mutate(
       { targetGameIndex: i, userId: players[0], targetGameName: gName },
       {
@@ -128,15 +136,23 @@ function NewPcGameList(props: PropsType) {
       return;
     }
 
-    setSnackOpen(false);
+    setSnackOpen({ open: false, message: "", severity: "success" });
   };
 
   return (
     <div>
       {loading && <UseBackDrop bdOpen={loading} />}
-      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          예약 성공!
+      <Snackbar
+        open={snackOpen.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          sx={{ width: "100%" }}
+          severity={snackOpen.severity}
+        >
+          {snackOpen.message}
         </Alert>
       </Snackbar>
       <div className={"flex flex-row"}>

@@ -1,3 +1,5 @@
+import { AlertColor } from "@mui/material";
+
 export type LogType = {
   id: string;
   data: {
@@ -8,6 +10,12 @@ export type LogType = {
     userName: string;
   };
 };
+
+export type SnackBarType = {
+  open: boolean,
+  message: string,
+  severity: AlertColor
+}
 
 export type Tgame = {
   userId: string;
