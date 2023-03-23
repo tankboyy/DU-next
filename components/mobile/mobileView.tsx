@@ -1,24 +1,25 @@
 import React from "react";
 import MobileGameList from "./mobileGameList";
 import MobileLayout from "./mobileLayout";
-import { useRecoilValue } from "recoil";
-import { userAtom } from "../../recoil/user";
-import MobileLoginComponent from "./mobileLoginComponent";
 import { useRouter } from "next/router";
+import { firebaseAuth } from "../../hooks/firebase";
+import { useRecoilState } from "recoil";
+import { userAtom } from "../../recoil/user";
 
 type PropsType = {};
 
 function MobileView(props: PropsType) {
-  const getUserKey = useRecoilValue(userAtom);
   const router = useRouter();
-  console.log(getUserKey);
-  if (getUserKey.userKey === "") router.push("/mobileLogin");
-
+  const [userAtomState, setUserAtomState] = useRecoilState(userAtom);
+  console.log(firebaseAuth.currentUser, userAtomState);
+  if (firebaseAuth.currentUser === null) router.push("/mobileLogin");
   return (
     <div>
       <>
-        <MobileLayout />
-        <MobileGameList />
+        <div>
+          <MobileLayout />
+          <MobileGameList />
+        </div>
       </>
     </div>
   );

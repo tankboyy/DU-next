@@ -9,7 +9,7 @@ export default function Home() {
 			<Seo title="Home"/>
 			<div>
 				<Pc>
-					<PcView />
+				<PcView />
 				</Pc>
 				<Mobile>
 					<MobileView />

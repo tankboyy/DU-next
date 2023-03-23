@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
@@ -31,11 +32,8 @@ const persistAtom2 = recoilPersist({
   storage: sessionStorage,
 });
 
-export const userAtom = atom({
+export const userAtom = atom<User>({
   key: "userState2",
-  default: {
-    userKey: "",
-  },
   effects_UNSTABLE: [persistAtom2.persistAtom],
 });
 

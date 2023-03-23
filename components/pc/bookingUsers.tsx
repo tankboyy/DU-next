@@ -11,9 +11,10 @@ import {
   ListItemText,
   ThemeProvider,
 } from "@mui/material";
+import { getOSByUserAgent, isMacOS, isMobileWeb, isServer, uniqBy } from "@toss/utils";
 
 function BookingUsers() {
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<LogType[]>([]);
   const setPlayers = useSetRecoilState(playersState);
   const players = useRecoilValue(filterPlayers);
   const [open, setOpen] = useState(false);
@@ -25,9 +26,8 @@ function BookingUsers() {
     }
     setOpen(!open);
     axios.get<LogType[]>("/getReserveLog").then(({ data }) => {
-      const returnData = data.map((log) => log.data.userId);
-      const result = [...new Set(returnData)];
-      setLogs(result);
+      const newData = uniqBy(data, item => item.data.userId)
+      setLogs(newData);
     });
   };
 
@@ -75,11 +75,11 @@ function BookingUsers() {
           logs.map((log, i) => (
             <ListItemButton
               key={i}
-              onClick={() => addPlayer(log)}
+              onClick={() => addPlayer(log.data.userId)}
               sx={{ py: 0, minHeight: 32, color: "rgba(black)" }}
             >
               <ListItemText
-                primary={log}
+                primary={log.data.userId}
                 primaryTypographyProps={{
                   fontSize: 14,
                   fontWeight: "medium",
