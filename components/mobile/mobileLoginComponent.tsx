@@ -52,7 +52,7 @@ function MobileLoginComponent() {
     )
       .then((data) => {
         setLoading(false);
-        setUserKey(data.user.uid);
+        setUserKey(data.user);
         router.push("/")
       })
       .catch((error) => {
