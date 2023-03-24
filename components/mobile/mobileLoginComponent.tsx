@@ -19,9 +19,8 @@ function MobileLoginComponent() {
   });
 
   const router = useRouter();
-  const { id } = router.query;
+  if(firebaseAuth.currentUser !== null) router.push("/")
 
-  console.log(id, router)
   const {
     register,
     handleSubmit,

@@ -11,7 +11,6 @@ type PropsType = {};
 function MobileView(props: PropsType) {
   const router = useRouter();
   const [userAtomState, setUserAtomState] = useRecoilState(userAtom);
-  console.log(firebaseAuth.currentUser, userAtomState);
   if (firebaseAuth.currentUser === null) router.push("/mobileLogin");
   return (
     <div>
